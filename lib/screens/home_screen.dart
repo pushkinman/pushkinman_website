@@ -1,35 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:pushkinman_website/appbars/custom_appbar.dart';
 import 'package:pushkinman_website/data/projects_description.dart';
+import 'package:pushkinman_website/sectors/about_page.dart';
 import 'package:pushkinman_website/widgets/project_item.dart';
 
+import '../sectors/welcome_page.dart';
+import '../sectors/work_experience.dart';
+
 class HomePage extends StatelessWidget {
-  final List<ProjectDescription> projects = PROJECTS_DATA;
+  late List<GlobalKey> navigationKeys;
+
+  List<GlobalKey> GenerateKeys(int count){
+    return List.generate(count, ((index) => GlobalKey()));
+  }
+
+  HomePage(){
+    navigationKeys = GenerateKeys(3);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      appBar: AppBar(title: CustomAppbar(navigationKeys)),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Center(
-              child: Container(
-                margin: EdgeInsets.all(20),
-                child: Text(
-                  'PushkinMan',
-                  style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 50,
-                ),
-                ),
-              ),
-            ),
-            ...projects
-                .map((project) =>
-                    ProjectItem(project.title, project.description, project.imageURL))
-                .toList(),
-          ],
-        ),
+        child: Column(children: [
+          WelcomePage(navigationKeys[0]),
+          AboutPage(navigationKeys[1]),
+          WorkExperience(navigationKeys[2]),
+        ],)
       ),
     );
   }
